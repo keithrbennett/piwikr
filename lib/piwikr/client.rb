@@ -25,13 +25,6 @@ module Piwikr
     end
 
 
-    def piwik_version
-      #response = call('ExampleAPI', 'ExampleAPI.getPiwikVersion')
-      response = call('ExampleAPI.getPiwikVersion')
-      Nokogiri::XML(response).xpath("/result").text
-    end
-
-
     def rest_call_params(api_method_name, args)
       params = {
           :token_auth => auth_token,
@@ -40,8 +33,18 @@ module Piwikr
           :method     => api_method_name
       }
       params.merge(args) if args
+
+      # The params must be a key/value pair in a containing hash.
       { :params => params }
     end
+
+
+    def piwik_version
+      response = call('ExampleAPI.getPiwikVersion')
+      Nokogiri::XML(response).xpath("/result").text
+    end
+
+
   end
 end
 
