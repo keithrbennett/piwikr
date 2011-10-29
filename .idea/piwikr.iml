@@ -4,7 +4,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.0.15, ruby-1.8.7-p334) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.0.12, RVM: ree-1.8.7-2011.03) [gem]" level="application" />
   </component>
 </module>
 

@@ -17,9 +17,8 @@ module Piwikr
 
     def piwik_version
       response = call('ExampleAPI.getPiwikVersion')
-      handle_result_error(response)
+      error?(response)
       result = Nokogiri::XML(response).xpath("/result")
-      puts "\nPiwik version: #{result.inspect}"
       result.text
     end
 
@@ -31,9 +30,7 @@ module Piwikr
           :date   => date,
           :filter_limit => filter_limit
       })
-      handle_result_error(response)
-      puts response
-      response
+      error?(response) ? nil : response
     end
 
 
@@ -80,12 +77,12 @@ module Piwikr
     end
 
 
-    def handle_result_error(response)
+    def error?(response)
       error_message = Nokogiri::XML(response).xpath('/result/error/@message')
-      if error_message
-        puts "\nmessage: #{error_message}"
-        raise RuntimeError.new(error_message)
+      unless error_message.empty?
+        STDERR.puts "\nmessage: #{error_message}"
       end
+      error_message
     end
   end
 end
