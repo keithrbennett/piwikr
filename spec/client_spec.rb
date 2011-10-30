@@ -7,7 +7,7 @@ module Piwikr
 describe Client do
 
   # Use of env. vars is for temporary convenience so as not to have to specify them in code or config.
-  let (:basic_client) do Client.new(ENV['PIWIK_URL'], ENV['PIWIK_TOKEN_AUTH'], '2') end
+  let (:basic_client) do Client.new(ENV['PIWIK_URL'], ENV['PIWIK_TOKEN_AUTH'], 3) end
   
   it "should instantiate" do
     lambda { Client.new('http://www.example.com/piwik', 'abcdefghij', 1) }.should_not raise_error
@@ -25,6 +25,13 @@ describe Client do
     hash = JSON.parse(response)
     puts "Visitor summary info is: #{hash.inspect}"
   end
+
+  it "should get reports" do
+    response = basic_client.get_reports(:json, 'never', 3)
+    response.should_not be_nil
+  end
+
+
 end
 
 

@@ -33,6 +33,24 @@ module Piwikr
       error?(response) ? nil : response
     end
 
+    # PDFReports.getReports (idSite = '', period = '', idReport = '', ifSuperUserReturnOnlySuperUserReports = '')
+    # http://174.129.232.233/piwik/index.php?module=API&action=index&idSite=3&period=day&date=yesterday&updated=1&token_auth=c0e024d9200b5705bc4804722636378a&method=PDFReports.generateReport&idReport=1&outputType=1&language=en&reportFormat=pdf
+    def get_reports(format, period, report_id, if_super_user_return_only_super_user_reports = false)
+      response = call('PDFReports.getReports', {
+          :format => format_string(format),
+          :period => period,
+          :idReport => report_id,
+          :ifSuperUserReturnOnlySuperUserReports => if_super_user_return_only_super_user_reports
+      })
+      if error?(response)
+        nil
+      else
+        response = JSON.parse(response) if format == :json
+        response
+      end
+    end
+
+
 
     def call(api_method_name, args = nil)
       params = rest_call_params(api_method_name, args)
