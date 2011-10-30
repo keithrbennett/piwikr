@@ -23,7 +23,7 @@ module Piwikr
     end
 
 
-    def visitor_log(format, period, date = Time.now.strftime('%Y-%m-%d'), filter_limit = 100)
+    def visitor_log_summary(format, period, date = Time.now.strftime('%Y-%m-%d'), filter_limit = 100)
       response = call('VisitsSummary.get', {
           :format => format_string(format),
           :period => period_string(period),
@@ -70,7 +70,7 @@ module Piwikr
           :module     => 'API',
           :method     => api_method_name
       }
-      params.merge(args) if args
+      params = params.merge(args) if args
 
       # The params must be a key/value pair in a containing hash.
       { :params => params }
@@ -78,11 +78,12 @@ module Piwikr
 
 
     def error?(response)
-      error_message = Nokogiri::XML(response).xpath('/result/error/@message')
-      unless error_message.empty?
+      error_message = Nokogiri::XML(response).xpath('/result/error/@message').text
+      error = ! error_message.empty?
+      if error
         STDERR.puts "\nmessage: #{error_message}"
       end
-      error_message
+      error
     end
   end
 end
