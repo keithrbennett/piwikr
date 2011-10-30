@@ -1,4 +1,15 @@
 An assembly of tools to assist in the operation and management of a Piwik site.
 
+This gem uses rest-client for REST calls.  If you need to see the request
+being set, then set a log by doing one of the following:
+
+1) Set a RESTCLIENT_LOG environment variable to stdout, stderr, or a file.
+
+2) Programmatically set the log:
+
+   require "logger"
+   RestClient.log = Logger.new(STDOUT)
+
+
 Keith Bennett
 keithrbennett@gmail.com
