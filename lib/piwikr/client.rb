@@ -23,7 +23,7 @@ module Piwikr
     end
 
 
-    def visitor_log_summary(format, period, date = Time.now.strftime('%Y-%m-%d'), filter_limit = 100)
+    def visitor_log_summary(format, period, date = yyyymmdd(Time.now), filter_limit = 100)
       response = call('VisitsSummary.get', {
           :format => format_string(format),
           :period => period_string(period),
@@ -50,7 +50,24 @@ module Piwikr
       end
     end
 
+    # PDFReports.generateReport (idReport, date, idSite = '', language = '', outputType = '', period = '', reportFormat = '')
+    def generate_report(report_id, output_filespec = 'report.pdf', date = yyyymmdd(Time.now))
+      response = call('PDFReports.generateReport', {
+          :idReport => report_id,
+          :period => 'month',
+          # :language = 'fr',
+          :date => date
+      })
 
+      if error?(response)
+        puts "\n\n#{response}\n\n"
+        nil
+      else
+        File.open(output_filespec, 'wb') { |f| f << response }
+        response
+      end
+    end
+    
 
     def call(api_method_name, args = nil)
       params = rest_call_params(api_method_name, args)
@@ -102,6 +119,10 @@ module Piwikr
         STDERR.puts "\nmessage: #{error_message}"
       end
       error
+    end
+
+    def yyyymmdd(time)
+      time.strftime('%Y-%m-%d')
     end
   end
 end

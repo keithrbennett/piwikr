@@ -4,6 +4,11 @@ require 'json'
 
 module Piwikr
 
+# This is really an integration test and not a unit test.
+# It assumes certain setup, such as a Piwik site and authorization token
+# being in environment variables, and that the web site at site id 3
+# is visible to the user who is the owner of the auth. token.
+
 describe Client do
 
   # Use of env. vars is for temporary convenience so as not to have to specify them in code or config.
@@ -26,11 +31,17 @@ describe Client do
     puts "Visitor summary info is: #{hash.inspect}"
   end
 
+  # !!! Assumes that a report #3 exists and is accessible to this user.
   it "should get reports" do
     response = basic_client.get_reports(:json, 'never', 3)
     response.should_not be_nil
   end
 
+  # !!! Assumes that a report #3 exists and is accessible to this user.
+  it "should generate a report" do
+    response = basic_client.generate_report(3)
+    response.should_not be_nil
+  end
 
 end
 
