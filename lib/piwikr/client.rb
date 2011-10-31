@@ -6,7 +6,11 @@ module Piwikr
 
   class Client
 
-    class Error < RuntimeError; end
+    class RestError < RuntimeError
+      def initialize(error_string = '')
+        super(error_string)
+      end
+    end
 
     attr_accessor :piwik_url, :auth_token, :website_spec
 
@@ -23,9 +27,9 @@ module Piwikr
     end
 
 
+    # How to page through all the results? Need a rec_to_start_at parameter?
     def visitor_log_summary(format, period, date = yyyymmdd(Time.now), filter_limit = 100)
       call('VisitsSummary.get', {
-          #:format => format_string(format == :ruby ? :json : format),
           :format => format_string(format),
           :period => period_string(period),
           :date   => date,
@@ -35,11 +39,9 @@ module Piwikr
 
     # PDFReports.getReports (idSite = '', period = '', idReport = '', ifSuperUserReturnOnlySuperUserReports = '')
     # http://174.129.232.233/piwik/index.php?module=API&action=index&idSite=3&period=day&date=yesterday&updated=1&token_auth=c0e024d9200b5705bc4804722636378a&method=PDFReports.generateReport&idReport=1&outputType=1&language=en&reportFormat=pdf
-    def get_reports(format, period, report_id, if_super_user_return_only_super_user_reports = false)
+    def get_reports(format, report_id, if_super_user_return_only_super_user_reports = false)
       call('PDFReports.getReports', {
-          #:format => format_string(format == :ruby ? :json : format),
           :format => format_string(format),
-          :period => period,
           :idReport => report_id,
           :ifSuperUserReturnOnlySuperUserReports => if_super_user_return_only_super_user_reports
       })
@@ -64,7 +66,7 @@ module Piwikr
       params = rest_call_params(api_method_name, args)
       response = RestClient.get(piwik_url, params)
       error = error_message(response)
-      raise Error.new(error) if error  # refine this
+      raise RestError.new(error) if error
       response = JSON.parse(response) if want_ruby_object && (! error)
       response
     end

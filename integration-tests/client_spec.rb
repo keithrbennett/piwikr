@@ -33,7 +33,7 @@ describe Client do
 
   # !!! Assumes that a report #3 exists and is accessible to this user.
   it "should get reports" do
-    response = basic_client.get_reports(:ruby, 'never', 3)
+    response = basic_client.get_reports(:ruby, 3)
     #puts "\n\n\n#{response.pretty_inspect}\n\n\n"
     response.should_not be_nil
   end
