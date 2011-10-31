@@ -28,7 +28,7 @@ describe Client do
   it "should get a visitor log" do
     response = basic_client.visitor_log_summary(:ruby, :year)
     response.should_not be_nil
-    puts "Visitor summary info is: #{hash.inspect}"
+    puts "Visitor summary info is: #{response.inspect}"
   end
 
   # !!! Assumes that a report #3 exists and is accessible to this user.
