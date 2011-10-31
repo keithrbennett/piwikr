@@ -1,6 +1,7 @@
-require 'spec_helper'
+require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'client'
 require 'json'
+require 'pp'
 
 module Piwikr
 
@@ -25,15 +26,15 @@ describe Client do
   end
 
   it "should get a visitor log" do
-    response = basic_client.visitor_log_summary(:json, :year)
+    response = basic_client.visitor_log_summary(:ruby, :year)
     response.should_not be_nil
-    hash = JSON.parse(response)
     puts "Visitor summary info is: #{hash.inspect}"
   end
 
   # !!! Assumes that a report #3 exists and is accessible to this user.
   it "should get reports" do
-    response = basic_client.get_reports(:json, 'never', 3)
+    response = basic_client.get_reports(:ruby, 'never', 3)
+    #puts "\n\n\n#{response.pretty_inspect}\n\n\n"
     response.should_not be_nil
   end
 
