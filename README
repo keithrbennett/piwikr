@@ -1,4 +1,14 @@
-An assembly of tools to assist in the operation and management of a Piwik site.
+* Piwikr *
+
+* A collection of tools to assist in querying and managing a Piwik site. *
+
+* Data Formats *
+
+Piwik API calls support requested formats of XML, JSON, PHP, and CSV.
+This library adds a 'ruby' format that will return the response data
+as a Ruby object (whatever JSON parses that to be).
+
+* Seeing the REST URL *
 
 This gem uses rest-client for REST calls.  If you need to see the request
 being set, then set a log by doing one of the following:
